@@ -3,7 +3,7 @@ import { AbilityBuilder, createMongoAbility, MongoAbility } from '@casl/ability'
 import { User } from '@prisma/client'
 
 // Define subjects (Prisma model names as strings for simplicity)
-type Subjects =
+export type Subjects =
   | 'Product'
   | 'ProductVariant'
   | 'Order'
@@ -86,7 +86,7 @@ export class AbilityFactory {
         break
 
       case 'WHOLESALE_BUYER':
-      case 'RETAIL_BUYER':
+      case 'CUSTOMER':
         can('read', 'Product')
         can('create', 'Order')
         can('read', 'Order') // own orders only

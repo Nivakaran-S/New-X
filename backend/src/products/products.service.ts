@@ -239,14 +239,14 @@ export class ProductsService {
       costPrice: v.costPrice.toNumber(),
       retailPrice: v.retailPrice.toNumber(),
       wholesalePrice: v.wholesalePrice.toNumber(),
-      lengthCm: v.lengthCm.toNumber(),
-      widthCm: v.widthCm.toNumber(),
-      heightCm: v.heightCm.toNumber(),
-      weightGrams: v.weightGrams.toNumber(),
-      caseLength: v.caseLength?.toNumber() ?? null,
-      caseWidth: v.caseWidth?.toNumber() ?? null,
-      caseHeight: v.caseHeight?.toNumber() ?? null,
-      caseWeightGrams: v.caseWeightGrams?.toNumber() ?? null,
+      lengthCm: v.lengthCm,
+      widthCm: v.widthCm,
+      heightCm: v.heightCm,
+      weightGrams: v.weightGrams,
+      caseLength: v.caseLength ?? null,
+      caseWidth: v.caseWidth ?? null,
+      caseHeight: v.caseHeight ?? null,
+      caseWeightGrams: v.caseWeightGrams ?? null,
     }))
   }
 
@@ -309,7 +309,6 @@ export class ProductsService {
       data: {
         productId,
         url,
-        filename,
         sortOrder,
       },
     })

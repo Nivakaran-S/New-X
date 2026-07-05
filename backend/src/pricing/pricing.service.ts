@@ -48,8 +48,8 @@ export class PricingService {
       .filter(r => r.unitType === unitType && r.minQty <= qty)
       .sort((a, b) => b.minQty - a.minQty) // highest minQty first = best match
 
-    if (rules.length > 0) {
-      const rule = rules[0]
+    const rule = rules[0]
+    if (rule) {
       return {
         price: Number(rule.price),
         label: rule.label ?? `Volume price (${unitType} x${qty})`,
@@ -74,8 +74,8 @@ export class PricingService {
       (p.scope === 'RETAIL' && user?.accountType === 'RETAIL'),
     )
 
-    if (applicable.length > 0) {
-      const promo = applicable[0]
+    const promo = applicable[0]
+    if (promo) {
       let promoPrice = basePrice
       if (promo.discountType === 'PERCENTAGE') {
         promoPrice = basePrice * (1 - Number(promo.discountValue) / 100)

@@ -68,7 +68,7 @@ export class WhatsAppController {
       // Only handle individual chats, not group messages
       if (!remoteJid || remoteJid.endsWith('@g.us')) return { ok: true }
 
-      const phone = remoteJid.split('@')[0]
+      const phone = remoteJid.split('@')[0]!
       const messageId: string = key.id ?? `unknown-${Date.now()}`
 
       const message = msgData?.message ?? {}

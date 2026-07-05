@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AbilityFactory } from './ability.factory'
+import { AbilityFactory, Subjects } from './ability.factory'
 import { CHECK_ABILITY, RequiredRule } from './check-ability.decorator'
 
 @Injectable()
@@ -18,6 +18,6 @@ export class AbilityGuard implements CanActivate {
     if (!user) return false
 
     const ability = this.abilityFactory.createForUser(user)
-    return rules.every(rule => ability.can(rule.action, rule.subject))
+    return rules.every(rule => ability.can(rule.action, rule.subject as Subjects))
   }
 }

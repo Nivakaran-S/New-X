@@ -62,7 +62,7 @@ export class ForecastingService {
     // Aggregate qty per day
     const dailySales = new Map<string, number>()
     for (const item of salesData) {
-      const day = item.order.createdAt.toISOString().split('T')[0]
+      const day = item.order.createdAt.toISOString().split('T')[0]!
       dailySales.set(day, (dailySales.get(day) ?? 0) + item.qty)
     }
 
@@ -71,7 +71,7 @@ export class ForecastingService {
     for (let i = HISTORY_DAYS - 1; i >= 0; i--) {
       const d = new Date()
       d.setDate(d.getDate() - i)
-      const key = d.toISOString().split('T')[0]
+      const key = d.toISOString().split('T')[0]!
       dailyQtyArray.push(dailySales.get(key) ?? 0)
     }
 

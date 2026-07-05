@@ -42,9 +42,6 @@ export class InventoryService {
   async findLowStock() {
     // Items where available qty <= reorderLevel
     const items = await this.prisma.inventoryItem.findMany({
-      where: {
-        reorderLevel: { not: null },
-      },
       include: {
         variant: {
           include: {
@@ -57,7 +54,7 @@ export class InventoryService {
     })
 
     // Filter in-memory to compare qty <= reorderLevel (Prisma doesn't support column-column comparisons easily)
-    return items.filter(item => item.reorderLevel !== null && item.qty <= item.reorderLevel)
+    return items.filter(item => item.qty <= item.reorderLevel)
   }
 
   async adjustStock(dto: AdjustStockDto, userId: string) {
@@ -225,14 +222,23 @@ export class InventoryService {
   }
 
   async getReservations(orderId: string) {
-    return this.prisma.inventoryAdjustment.findMany({
+    // InventoryAdjustment stores variantId as a plain column (no relation),
+    // so fetch the adjustments then stitch in variant/product details.
+    const adjustments = await this.prisma.inventoryAdjustment.findMany({
       where: { reference: orderId },
-      include: {
-        variant: {
-          include: { product: { select: { id: true, name: true, sku: true } } },
-        },
-      },
       orderBy: { createdAt: 'desc' },
     })
+
+    const variantIds = [...new Set(adjustments.map(a => a.variantId))]
+    const variants = await this.prisma.productVariant.findMany({
+      where: { id: { in: variantIds } },
+      include: { product: { select: { id: true, name: true, sku: true } } },
+    })
+    const variantById = new Map(variants.map(v => [v.id, v]))
+
+    return adjustments.map(a => ({
+      ...a,
+      variant: variantById.get(a.variantId) ?? null,
+    }))
   }
 }

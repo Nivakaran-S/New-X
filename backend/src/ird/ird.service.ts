@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { ConfigService } from '@nestjs/config'
 import { PrismaService } from '../prisma/prisma.service'
+import { Prisma } from '@prisma/client'
 
 const MAX_RETRY_ATTEMPTS = 5
 const VAT_RATE = 0.18
@@ -117,7 +118,7 @@ export class IrdService {
           where: { id: submission.id },
           data: {
             status: 'failed',
-            response: responseBody,
+            response: responseBody as Prisma.InputJsonValue,
             attempts: { increment: 1 },
           },
         })
@@ -131,7 +132,7 @@ export class IrdService {
           where: { id: submission.id },
           data: {
             status: 'submitted',
-            response: responseBody,
+            response: responseBody as Prisma.InputJsonValue,
             submittedAt: new Date(),
             attempts: { increment: 1 },
           },

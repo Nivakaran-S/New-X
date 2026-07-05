@@ -51,15 +51,15 @@ export class ReferralService {
 
     // Idempotency — only create one referral per pair
     const existing = await this.prisma.referral.findFirst({
-      where: { referrerId: referrer.id, referredId: newUserId },
+      where: { referrerId: referrer.id, refereeId: newUserId },
     })
     if (existing) return
 
     await this.prisma.referral.create({
       data: {
         referrerId: referrer.id,
-        referredId: newUserId,
-        bonusAwarded: false,
+        refereeId: newUserId,
+        // status defaults to "pending"; bonus is tracked via status/rewardedAt
       },
     })
     this.logger.log(`Referral created: ${referrer.id} -> ${newUserId}`)
@@ -73,7 +73,16 @@ export class ReferralService {
     const referral = await this.prisma.referral.findUnique({
       where: { id: referralId },
     })
-    if (!referral || referral.bonusAwarded) return
+    if (!referral || referral.status === 'rewarded') return
+
+    // Read the referrer's current balance so we can record the post-tx total
+    const referrer = await this.prisma.user.findUnique({
+      where: { id: referral.referrerId },
+      select: { loyaltyPoints: true },
+    })
+    if (!referrer) return
+
+    const newBalance = referrer.loyaltyPoints + REFERRAL_BONUS_POINTS
 
     // Credit bonus points to referrer via a BONUS transaction
     await this.prisma.$transaction([
@@ -82,6 +91,7 @@ export class ReferralService {
           userId: referral.referrerId,
           type: 'BONUS',
           points: REFERRAL_BONUS_POINTS,
+          balance: newBalance,
           description: `Referral bonus — friend completed first order`,
         },
       }),
@@ -91,7 +101,7 @@ export class ReferralService {
       }),
       this.prisma.referral.update({
         where: { id: referralId },
-        data: { bonusAwarded: true },
+        data: { status: 'rewarded', rewardedAt: new Date() },
       }),
     ])
     this.logger.log(`Awarded ${REFERRAL_BONUS_POINTS} referral bonus points to user ${referral.referrerId}`)
@@ -110,15 +120,12 @@ export class ReferralService {
     if (orderCount !== 1) return // not their first order
 
     const referral = await this.prisma.referral.findFirst({
-      where: { referredId: userId, bonusAwarded: false },
+      where: { refereeId: userId, status: 'pending' },
     })
     if (!referral) return
 
-    await this.prisma.referral.update({
-      where: { id: referral.id },
-      data: { orderId },
-    })
-
+    // Note: the Referral model has no orderId column, so the triggering order
+    // (${orderId}) is not persisted here; the bonus award marks status=rewarded.
     await this.awardReferralBonus(referral.id)
   }
 
@@ -128,22 +135,26 @@ export class ReferralService {
   async getReferralStats(userId: string) {
     const referrals = await this.prisma.referral.findMany({
       where: { referrerId: userId },
-      include: {
-        referred: { select: { id: true, name: true, createdAt: true } },
-      },
       orderBy: { createdAt: 'desc' },
     })
 
-    const totalBonus = referrals.filter(r => r.bonusAwarded).length * REFERRAL_BONUS_POINTS
+    // refereeId is a plain column (no relation) — fetch referee users and stitch.
+    const referees = await this.prisma.user.findMany({
+      where: { id: { in: referrals.map(r => r.refereeId) } },
+      select: { id: true, name: true, createdAt: true },
+    })
+    const refereeById = new Map(referees.map(u => [u.id, u]))
+
+    const rewardedCount = referrals.filter(r => r.status === 'rewarded').length
     return {
       totalReferred: referrals.length,
-      bonusAwarded: referrals.filter(r => r.bonusAwarded).length,
-      pendingBonus: referrals.filter(r => !r.bonusAwarded).length,
-      totalBonusPoints: totalBonus,
+      bonusAwarded: rewardedCount,
+      pendingBonus: referrals.filter(r => r.status !== 'rewarded').length,
+      totalBonusPoints: rewardedCount * REFERRAL_BONUS_POINTS,
       referrals: referrals.map(r => ({
         id: r.id,
-        referredUser: r.referred,
-        bonusAwarded: r.bonusAwarded,
+        referredUser: refereeById.get(r.refereeId) ?? null,
+        bonusAwarded: r.status === 'rewarded',
         createdAt: r.createdAt,
       })),
     }
@@ -156,13 +167,24 @@ export class ReferralService {
         skip,
         take,
         orderBy: { createdAt: 'desc' },
-        include: {
-          referrer: { select: { id: true, name: true, email: true } },
-          referred: { select: { id: true, name: true, email: true } },
-        },
       }),
       this.prisma.referral.count(),
     ])
-    return { referrals, total }
+
+    // referrerId/refereeId are plain columns (no relations) — stitch user data.
+    const userIds = [...new Set(referrals.flatMap(r => [r.referrerId, r.refereeId]))]
+    const users = await this.prisma.user.findMany({
+      where: { id: { in: userIds } },
+      select: { id: true, name: true, email: true },
+    })
+    const userById = new Map(users.map(u => [u.id, u]))
+
+    const enriched = referrals.map(r => ({
+      ...r,
+      referrer: userById.get(r.referrerId) ?? null,
+      referred: userById.get(r.refereeId) ?? null,
+    }))
+
+    return { referrals: enriched, total }
   }
 }

@@ -31,12 +31,15 @@ export class LoyaltyService {
     const pointsEarned = Math.floor(Number(order.totalAmount) / POINTS_PER_LKR)
     if (pointsEarned <= 0) return
 
+    const newBalance = (order.customer?.loyaltyPoints ?? 0) + pointsEarned
+
     await this.prisma.$transaction([
       this.prisma.loyaltyTransaction.create({
         data: {
           userId: order.customerId,
           type: 'EARN',
           points: pointsEarned,
+          balance: newBalance,
           orderId,
           description: `Earned from order #${order.orderNumber}`,
         },
@@ -66,6 +69,7 @@ export class LoyaltyService {
     }
 
     const discountAmount = dto.pointsToRedeem * POINT_VALUE_LKR
+    const newBalance = user.loyaltyPoints - dto.pointsToRedeem
 
     await this.prisma.$transaction([
       this.prisma.loyaltyTransaction.create({
@@ -73,6 +77,7 @@ export class LoyaltyService {
           userId,
           type: 'REDEEM',
           points: -dto.pointsToRedeem,
+          balance: newBalance,
           orderId: dto.orderId,
           description: `Redeemed ${dto.pointsToRedeem} points for LKR ${discountAmount.toFixed(2)} discount`,
         },
@@ -206,12 +211,15 @@ export class LoyaltyService {
       const actualExpiry = Math.min(pointsToExpire, user.loyaltyPoints)
       if (actualExpiry <= 0) continue
 
+      const newBalance = user.loyaltyPoints - actualExpiry
+
       await this.prisma.$transaction([
         this.prisma.loyaltyTransaction.create({
           data: {
             userId,
             type: 'EXPIRE',
             points: -actualExpiry,
+            balance: newBalance,
             description: `Points expired after ${EXPIRY_DAYS} days`,
           },
         }),

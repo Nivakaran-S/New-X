@@ -4,10 +4,10 @@ import { Queue } from 'bullmq'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { PrismaService } from '../prisma/prisma.service'
 import { InventoryService } from '../inventory/inventory.service'
-import { PaginationDto, paginate } from '../common/dto/pagination.dto'
+import { PaginationDto } from '../common/dto/pagination.dto'
 import { BankTransferDto } from './dto/bank-transfer.dto'
 import { VerifyPaymentDto } from './dto/verify-payment.dto'
-import { PaymentMethod, PaymentStatus, OrderStatus } from '@prisma/client'
+import { PaymentMethod, PaymentStatus, OrderStatus, Prisma } from '@prisma/client'
 
 @Injectable()
 export class PaymentsService {
@@ -162,16 +162,20 @@ export class PaymentsService {
   }
 
   async getPendingPayments(dto: PaginationDto) {
-    const where = {
-      paymentStatus: {
-        in: [PaymentStatus.PENDING, PaymentStatus.PENDING_VERIFICATION],
-      },
+    // Orders awaiting payment verification: a submitted-but-unverified payment
+    // (paymentStatus PENDING) or an order flagged as PENDING_VERIFICATION.
+    const where: Prisma.OrderWhereInput = {
+      OR: [
+        { paymentStatus: PaymentStatus.PENDING },
+        { status: OrderStatus.PENDING_VERIFICATION },
+      ],
     }
 
     const [data, total] = await Promise.all([
       this.prisma.order.findMany({
         where,
-        ...paginate(dto),
+        skip: dto.skip,
+        take: dto.limit,
         orderBy: { createdAt: 'desc' },
         include: {
           payments: true,
