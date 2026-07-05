@@ -1,0 +1,68 @@
+version: '3.9'
+
+# Evolution API v2 — WhatsApp Gateway
+# Standalone deployment for HealPlace
+# Docs: https://doc.evolution-api.com/
+
+services:
+  evolution-api:
+    image: atendai/evolution-api:latest
+    container_name: healplace-evolution-api
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    environment:
+      # Server
+      SERVER_URL: ${SERVER_URL:-http://localhost:8080}
+      SERVER_PORT: 8080
+
+      # Authentication
+      AUTHENTICATION_TYPE: apikey
+      AUTHENTICATION_API_KEY: ${AUTHENTICATION_API_KEY:?AUTHENTICATION_API_KEY is required}
+
+      # Database — disabled for simple dev; enable for production
+      DATABASE_ENABLED: ${DATABASE_ENABLED:-false}
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: ${DATABASE_URL:-}
+
+      # Redis — disabled for simple dev; enable for production
+      CACHE_REDIS_ENABLED: ${REDIS_ENABLED:-false}
+      CACHE_REDIS_URI: ${REDIS_URL:-redis://localhost:6379}
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_REDIS_SAVE_INSTANCES: false
+      CACHE_LOCAL_ENABLED: true
+
+      # WhatsApp
+      WA_BUSINESS_TOKEN_WEBHOOK: ${WA_BUSINESS_TOKEN_WEBHOOK:-}
+
+      # Webhook — where Evolution sends events (your HealPlace API)
+      WEBHOOK_GLOBAL_URL: ${WEBHOOK_GLOBAL_URL:-}
+      WEBHOOK_GLOBAL_ENABLED: ${WEBHOOK_GLOBAL_ENABLED:-false}
+      WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: false
+      WEBHOOK_EVENTS_APPLICATION_STARTUP: false
+      WEBHOOK_EVENTS_QRCODE_UPDATED: true
+      WEBHOOK_EVENTS_MESSAGES_SET: false
+      WEBHOOK_EVENTS_MESSAGES_UPSERT: true
+      WEBHOOK_EVENTS_MESSAGES_UPDATE: true
+      WEBHOOK_EVENTS_MESSAGES_DELETE: false
+      WEBHOOK_EVENTS_CONNECTION_UPDATE: true
+
+      # Logging
+      LOG_LEVEL: ERROR,WARN,INFO
+      LOG_COLOR: true
+
+    volumes:
+      - evolution_store:/evolution/store
+      - evolution_instances:/evolution/instances
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:8080/health || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  evolution_store:
+    name: healplace_evolution_store
+  evolution_instances:
+    name: healplace_evolution_instances

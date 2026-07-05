@@ -1,0 +1,36 @@
+version: '3.9'
+
+# Meilisearch — Search Engine
+# Standalone deployment for HealPlace
+# Docs: https://www.meilisearch.com/docs/guides/deployment/docker
+
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    container_name: healplace-meilisearch
+    restart: unless-stopped
+    ports:
+      - '7700:7700'
+    environment:
+      # Master key — required in production, optional in development
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-healplace_meili_dev_key}
+
+      # Environment: development (no auth required) | production (auth required)
+      MEILI_ENV: ${MEILI_ENV:-development}
+
+      # Optional: analytics and logs
+      MEILI_NO_ANALYTICS: ${MEILI_NO_ANALYTICS:-true}
+      MEILI_LOG_LEVEL: ${MEILI_LOG_LEVEL:-INFO}
+
+    volumes:
+      - meilisearch_data:/meili_data
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:7700/health || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  meilisearch_data:
+    name: healplace_meilisearch_data
