@@ -3,6 +3,9 @@
 
 generator client {
   provider = "prisma-client-js"
+  // "native" covers local dev; the arm64 target is required for the Raspberry Pi
+  // (64-bit Raspberry Pi OS / Debian Bookworm ships OpenSSL 3.x).
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {

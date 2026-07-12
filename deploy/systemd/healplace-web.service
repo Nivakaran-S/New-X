@@ -1,0 +1,35 @@
+[Unit]
+Description=HealPlace Web Store (Next.js standalone)
+After=network-online.target healplace-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=healplace
+Group=healplace
+WorkingDirectory=/srv/healplace/web
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# Bind to loopback only — Caddy/cloudflared is the only thing that should reach it.
+Environment=HOSTNAME=127.0.0.1
+Environment=NODE_OPTIONS=--max-old-space-size=320
+EnvironmentFile=-/srv/healplace/web/.env.local
+ExecStart=/opt/node/bin/node server.js
+
+Restart=always
+RestartSec=5
+
+MemoryHigh=350M
+MemoryMax=450M
+OOMPolicy=restart
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

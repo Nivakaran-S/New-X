@@ -1,0 +1,38 @@
+[Unit]
+Description=HealPlace API (NestJS)
+Documentation=https://github.com/Nivakaran-S/New-X
+After=network-online.target postgresql.service redis-server.service
+Wants=network-online.target
+# Redis is not optional: order creation awaits a BullMQ enqueue, and BullMQ
+# retries forever rather than failing, so a missing Redis hangs writes.
+Requires=postgresql.service redis-server.service
+
+[Service]
+Type=simple
+User=healplace
+Group=healplace
+WorkingDirectory=/srv/healplace/api
+EnvironmentFile=/srv/healplace/api/.env
+Environment=NODE_ENV=production
+Environment=NODE_OPTIONS=--max-old-space-size=384
+ExecStart=/opt/node/bin/node dist/main.js
+
+Restart=always
+RestartSec=5
+
+# Guardrails: a leak here must never be able to take Postgres down with it.
+MemoryHigh=450M
+MemoryMax=600M
+OOMPolicy=restart
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/healplace/api
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

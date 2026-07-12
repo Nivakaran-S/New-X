@@ -1,0 +1,91 @@
+name: Build ARM64 artifacts (Raspberry Pi)
+
+# Builds every deployable on a NATIVE arm64 runner, so the Pi never has to build
+# anything. This matters more than it sounds: Next 16 defaults to Turbopack, whose
+# memory is allocated in native Rust — NODE_OPTIONS=--max-old-space-size cannot
+# cap it, so a `next build` on a 4GB Pi is decided by the OOM killer, not by Node.
+# Building here also keeps multi-GB build writes off the Pi's storage.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "web/**"
+      - "admin/**"
+      - "pos/**"
+      - ".github/workflows/build-arm64.yml"
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  build:
+    # Native arm64 — no QEMU emulation.
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ── Backend: dist + production node_modules (incl. the arm64 Prisma engine) ──
+      - name: Build backend
+        working-directory: backend
+        run: |
+          npm ci
+          npx prisma generate          # emits libquery_engine-linux-arm64-openssl-3.0.x
+          npm run build                # nest build == tsc, cheap
+          npm prune --omit=dev
+
+      - name: Package backend
+        run: |
+          mkdir -p out/api
+          cp -r backend/dist backend/node_modules backend/package.json backend/prisma out/api/
+
+      # ── web / admin: Next standalone bundles ──
+      - name: Build web
+        working-directory: web
+        run: |
+          npm ci
+          npx next build
+
+      - name: Build admin
+        working-directory: admin
+        run: |
+          npm ci
+          npx next build
+
+      - name: Package web + admin
+        run: |
+          for app in web admin; do
+            mkdir -p "out/$app"
+            # standalone omits .next/static and public — they must be copied alongside.
+            cp -r "$app/.next/standalone/." "out/$app/"
+            mkdir -p "out/$app/.next"
+            cp -r "$app/.next/static" "out/$app/.next/static"
+            [ -d "$app/public" ] && cp -r "$app/public" "out/$app/public" || true
+          done
+
+      # ── POS: static export, no Node process on the Pi ──
+      - name: Build pos (static export)
+        working-directory: pos
+        run: |
+          npm ci
+          npx next build
+
+      - name: Package pos
+        run: |
+          mkdir -p out/pos
+          cp -r pos/out/. out/pos/
+
+      - name: Create deploy bundle
+        run: tar -czf healplace-arm64.tar.gz -C out .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: healplace-arm64
+          path: healplace-arm64.tar.gz
+          retention-days: 14

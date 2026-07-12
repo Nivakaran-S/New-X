@@ -1,0 +1,12 @@
+[Unit]
+Description=HealPlace hourly PostgreSQL offsite backup
+After=postgresql.service network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pg-backup.sh
+# Never let a backup starve the live services.
+Nice=10
+IOSchedulingClass=idle
+MemoryMax=256M

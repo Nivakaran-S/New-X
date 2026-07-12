@@ -5,8 +5,14 @@ import { ConfigService } from '@nestjs/config'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
+  // Verbose logging is a real cost on flash-backed hosts (every request hits the
+  // journal), so only enable the noisy levels outside production.
+  const isProd = process.env.NODE_ENV === 'production'
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+    logger: isProd
+      ? ['error', 'warn', 'log']
+      : ['error', 'warn', 'log', 'debug', 'verbose'],
   })
 
   const config = app.get(ConfigService)

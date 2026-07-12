@@ -6,6 +6,11 @@ import type { ProductCardData } from '@/components/products/ProductCard'
 import { apiGet } from '@/lib/api'
 import type { ApiResponse } from '@/types'
 
+// The featured-products fetch below is best-effort: if the API is unreachable at
+// build time it renders the empty state. Without a revalidate window that empty
+// HTML would be frozen in permanently, so re-generate it periodically.
+export const revalidate = 300
+
 // Category data
 const CATEGORIES = [
   {

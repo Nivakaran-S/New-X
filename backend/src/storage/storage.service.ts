@@ -10,10 +10,25 @@ export class StorageService {
   private readonly bucket: string
 
   constructor(private config: ConfigService) {
-    this.bucket = config.get<string>('R2_BUCKET', 'healplace')
+    // Accept either R2_BUCKET_NAME (as documented in .env.example) or R2_BUCKET.
+    this.bucket =
+      config.get<string>('R2_BUCKET_NAME') ??
+      config.get<string>('R2_BUCKET') ??
+      'healplace'
+
+    // R2's S3 endpoint is derived from the account id unless given explicitly.
+    const accountId = config.get<string>('R2_ACCOUNT_ID', '')
+    const endpoint =
+      config.get<string>('R2_ENDPOINT') ||
+      (accountId ? `https://${accountId}.r2.cloudflarestorage.com` : '')
+
+    if (!endpoint) {
+      this.logger.warn('R2 endpoint not configured — uploads will fail')
+    }
+
     this.s3 = new S3Client({
       region: 'auto',
-      endpoint: config.get<string>('R2_ENDPOINT', ''),
+      endpoint,
       credentials: {
         accessKeyId: config.get<string>('R2_ACCESS_KEY_ID', ''),
         secretAccessKey: config.get<string>('R2_SECRET_ACCESS_KEY', ''),

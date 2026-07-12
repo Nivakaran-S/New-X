@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the HealPlace PostgreSQL backup hourly
+
+[Timer]
+OnCalendar=hourly
+# Survive reboots: if the Pi was off when a run was due, catch up on boot.
+Persistent=true
+RandomizedDelaySec=5m
+
+[Install]
+WantedBy=timers.target
