@@ -154,7 +154,21 @@ R2_SECRET_ACCESS_KEY="..."
 R2_PUBLIC_URL="https://uploads.wonderland.lk"
 ```
 
-Each front-end needs `.env.local` with `NEXT_PUBLIC_API_URL=https://api.wonderland.lk/api/v1`.
+> ### ⚠️ The front-end API URL is a BUILD-time value, not a runtime one
+>
+> `NEXT_PUBLIC_*` variables are **inlined into the JS bundle when the app is built**.
+> Putting `NEXT_PUBLIC_API_URL` in a `.env.local` on the Pi does **nothing** — the
+> already-built bundle keeps whatever was baked in. If it was built without one, the
+> apps ship with `lib/api.ts`'s fallback (`http://localhost:3001/api/v1`) and every
+> call from a user's browser fails. The static POS has no runtime escape hatch at all.
+>
+> It is set in `.github/workflows/build-arm64.yml`. To change the domain, set the repo
+> variable **`NEXT_PUBLIC_API_URL`** (Settings → Secrets and variables → Actions →
+> Variables) and re-run the build. Confirm what got baked in:
+>
+> ```bash
+> grep -rho "https://api[^\"']*" /srv/wonderland/pos/*.html | head -1
+> ```
 
 Migrate + seed, then start:
 
@@ -191,8 +205,33 @@ DDNS, no exposed home IP. WebSockets (Socket.io) work on the free plan.
 
 ## Phase 5 — WhatsApp bot
 
+Evolution runs in Docker but uses the **host's** Postgres and Redis, so the host has
+to actually accept connections from the Docker bridge — it won't by default.
+
 ```bash
-docker buildx imagetools inspect atendai/evolution-api:v2.2.3 | grep arm64   # MUST match
+# 1. Evolution keeps its own schema; give it its own database.
+sudo -u postgres createdb -O wonderland evolution
+
+# 2. Let the Docker bridge (172.17.0.0/16) reach Postgres.
+echo "host all all 172.17.0.0/16 scram-sha-256" | sudo tee -a /etc/postgresql/16/main/pg_hba.conf
+sudo sed -i "s/^#\?listen_addresses.*/listen_addresses = 'localhost,172.17.0.1'/" \
+  /etc/postgresql/16/main/postgresql.conf
+sudo systemctl restart postgresql
+
+# 3. Same for Redis.
+sudo sed -i 's/^bind 127.0.0.1.*/bind 127.0.0.1 172.17.0.1/' /etc/redis/redis.conf
+sudo systemctl restart redis-server
+
+# 4. Verify the image really is arm64 (v1.8.7 and all v1.7.x are amd64-ONLY).
+docker buildx imagetools inspect atendai/evolution-api:v2.2.3 | grep arm64
+
+# 5. deploy/evolution/.env
+cat <<'EOF' | sudo tee deploy/evolution/.env
+EVOLUTION_API_KEY=<a long random string>
+EVOLUTION_DATABASE_URL=postgresql://wonderland:PASSWORD@host.docker.internal:5432/evolution
+EVOLUTION_REDIS_URL=redis://host.docker.internal:6379/1
+EOF
+
 cd deploy/evolution && docker compose up -d
 ```
 

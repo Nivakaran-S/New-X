@@ -20,6 +20,17 @@ on:
 env:
   NODE_VERSION: "22"
 
+  # CRITICAL: NEXT_PUBLIC_* values are INLINED INTO THE BUNDLE AT BUILD TIME.
+  # Setting them in a .env.local on the Pi does nothing — the apps would ship with
+  # lib/api.ts's fallback (http://localhost:3001/api/v1) baked in, and every call
+  # from a user's browser would fail. For the static POS export there is no runtime
+  # fix at all. They must be correct HERE.
+  # Override per-repo via Settings -> Variables if the domain changes.
+  NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://api.wonderland.lk/api/v1' }}
+  NEXT_PUBLIC_WEB_URL: ${{ vars.NEXT_PUBLIC_WEB_URL || 'https://wonderland.lk' }}
+  NEXT_PUBLIC_META_PIXEL_ID: ${{ vars.NEXT_PUBLIC_META_PIXEL_ID }}
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+
 jobs:
   build:
     # Native arm64 — no QEMU emulation.
@@ -31,14 +42,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # ── Backend: dist + production node_modules (incl. the arm64 Prisma engine) ──
+      - name: Show baked-in API URL
+        run: echo "Front-ends will be built against $NEXT_PUBLIC_API_URL"
+
+      # ── Backend: dist + node_modules (incl. the arm64 Prisma engine) ──
+      # NOTE: devDependencies are deliberately NOT pruned. The Pi needs the Prisma
+      # CLI for `prisma migrate deploy` and ts-node for `prisma db seed`; both are
+      # devDependencies, so pruning them silently breaks first-boot provisioning.
       - name: Build backend
         working-directory: backend
         run: |
           npm ci
           npx prisma generate          # emits libquery_engine-linux-arm64-openssl-3.0.x
           npm run build                # nest build == tsc, cheap
-          npm prune --omit=dev
 
       - name: Package backend
         run: |
