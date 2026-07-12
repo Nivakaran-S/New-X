@@ -1,4 +1,4 @@
-# HealPlace — Caddy on the Raspberry Pi.
+# Wonderland — Caddy on the Raspberry Pi.
 #
 # TLS is terminated by Cloudflare, and cloudflared forwards the original Host
 # header here over loopback, so Caddy runs plain HTTP and does no certificate
@@ -13,27 +13,27 @@
 	encode zstd gzip
 
 	# ── Customer web store (Next.js standalone) ──
-	@web host healplace.lk www.healplace.lk
+	@web host wonderland.lk www.wonderland.lk
 	handle @web {
 		reverse_proxy 127.0.0.1:3000
 	}
 
 	# ── API (NestJS + Socket.io). Caddy proxies WebSockets natively. ──
-	@api host api.healplace.lk
+	@api host api.wonderland.lk
 	handle @api {
 		reverse_proxy 127.0.0.1:3001
 	}
 
 	# ── Admin panel (Next.js standalone) ──
-	@admin host admin.healplace.lk
+	@admin host admin.wonderland.lk
 	handle @admin {
 		reverse_proxy 127.0.0.1:3003
 	}
 
 	# ── POS: pure static export, no Node process ──
-	@pos host pos.healplace.lk
+	@pos host pos.wonderland.lk
 	handle @pos {
-		root * /srv/healplace/pos
+		root * /srv/wonderland/pos
 		try_files {path} {path}.html {path}/index.html /index.html
 		file_server
 	}

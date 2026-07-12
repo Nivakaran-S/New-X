@@ -1,5 +1,5 @@
 [Unit]
-Description=HealPlace API (NestJS)
+Description=Wonderland API (NestJS)
 Documentation=https://github.com/Nivakaran-S/New-X
 After=network-online.target postgresql.service redis-server.service
 Wants=network-online.target
@@ -9,10 +9,10 @@ Requires=postgresql.service redis-server.service
 
 [Service]
 Type=simple
-User=healplace
-Group=healplace
-WorkingDirectory=/srv/healplace/api
-EnvironmentFile=/srv/healplace/api/.env
+User=wonderland
+Group=wonderland
+WorkingDirectory=/srv/wonderland/api
+EnvironmentFile=/srv/wonderland/api/.env
 Environment=NODE_ENV=production
 Environment=NODE_OPTIONS=--max-old-space-size=384
 ExecStart=/opt/node/bin/node dist/main.js
@@ -29,7 +29,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/srv/healplace/api
+ReadWritePaths=/srv/wonderland/api
 
 StandardOutput=journal
 StandardError=journal

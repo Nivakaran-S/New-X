@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthState>()(
       isWholesale: () => get().user?.accountType === 'WHOLESALE',
     }),
     {
-      name: 'healplace-auth',
+      name: 'wonderland-auth',
       storage: createJSONStorage(() => localStorage),
     },
   ),
@@ -129,7 +129,7 @@ export const useCartStore = create<CartState>()(
       total: (deliveryFee = 0) => get().subtotal() + deliveryFee,
     }),
     {
-      name: 'healplace-cart',
+      name: 'wonderland-cart',
       storage: createJSONStorage(() => localStorage),
     },
   ),

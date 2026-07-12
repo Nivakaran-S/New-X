@@ -10,7 +10,7 @@ interface WhatsAppButtonProps {
 
 export function WhatsAppButton({
   phone,
-  message = 'Hi HealPlace, I need help with my order.',
+  message = 'Hi Wonderland, I need help with my order.',
 }: WhatsAppButtonProps) {
   const url = buildWhatsAppUrl(phone, message)
 

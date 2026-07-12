@@ -76,7 +76,7 @@ export class WhatsAppService {
       `Order: *${order.orderNumber}*\n` +
       `Items:\n${items}\n\n` +
       `Total: *LKR ${Number(order.totalAmount).toFixed(2)}*\n\n` +
-      `We'll notify you when your order is on the way. Thank you for choosing HealPlace! 🙏`
+      `We'll notify you when your order is on the way. Thank you for choosing Wonderland! 🙏`
 
     await this.sendTextMessage(normalised, text)
   }
@@ -94,7 +94,7 @@ export class WhatsAppService {
       `*Bank Transfer Details:*\n` +
       `Bank: Sampath Bank\n` +
       `Account: 1234567890\n` +
-      `Account Name: HealPlace (Pvt) Ltd\n\n` +
+      `Account Name: Wonderland (Pvt) Ltd\n\n` +
       `Please transfer the amount and reply with your transaction reference. ` +
       `Your order will be confirmed once payment is verified. Thank you!`
 
@@ -112,7 +112,7 @@ export class WhatsAppService {
       PROCESSING: '⚙️ Your order is being processed.',
       DISPATCHED: '🚚 Your order has been dispatched and is on its way!',
       OUT_FOR_DELIVERY: '📍 Your order is out for delivery. Expect it today!',
-      DELIVERED: '✅ Your order has been delivered. Thank you for shopping with HealPlace!',
+      DELIVERED: '✅ Your order has been delivered. Thank you for shopping with Wonderland!',
       CANCELLED: '❌ Your order has been cancelled. Please contact us for assistance.',
     }
 
@@ -141,7 +141,7 @@ export class WhatsAppService {
     const text =
       `🛒 *You left something behind, ${user.name ?? 'there'}!*\n\n` +
       `Items still in your cart:\n${itemLines}\n\n` +
-      `Complete your order here: https://healplace.com/cart\n\n` +
+      `Complete your order here: https://wonderland.com/cart\n\n` +
       `Reply *ORDER* to place your order via WhatsApp, or visit the link above. ` +
       `Stock is limited — grab yours before it's gone! 😊`
 
@@ -263,7 +263,7 @@ export class WhatsAppService {
       return {
         reply:
           '👤 *Connecting you to our team...*\n\n' +
-          'A HealPlace team member will be with you shortly. ' +
+          'A Wonderland team member will be with you shortly. ' +
           'Our support hours are Mon–Sat, 8 AM – 6 PM.\n\n' +
           'We typically respond within 15 minutes during business hours. 🙏',
         nextState: null, // already saved above
@@ -275,7 +275,7 @@ export class WhatsAppService {
     // ── null / "start" → show welcome menu ─────────────────────────────────
     if (!step || step === 'start') {
       const reply =
-        `👋 *Welcome to HealPlace!*\n\n` +
+        `👋 *Welcome to Wonderland!*\n\n` +
         `Sri Lanka's trusted wholesale FMCG distributor. How can we help you today?\n\n` +
         `1️⃣  Browse Products\n` +
         `2️⃣  Place an Order\n` +
@@ -297,7 +297,7 @@ export class WhatsAppService {
           `• Snacks & Confectionery\n` +
           `• Household & Cleaning\n` +
           `• Personal Care\n\n` +
-          `Visit our catalogue: https://healplace.com/products\n\n` +
+          `Visit our catalogue: https://wonderland.com/products\n\n` +
           `Reply *ORDER* to start placing an order, or *MENU* to go back.`
 
         return { reply, nextState: { ...botState, step: 'browse' } }
@@ -386,7 +386,7 @@ export class WhatsAppService {
       const reply =
         `✅ Category selected: *${category}*\n\n` +
         `To browse and add specific items, please visit:\n` +
-        `https://healplace.com/products?category=${encodeURIComponent(category)}\n\n` +
+        `https://wonderland.com/products?category=${encodeURIComponent(category)}\n\n` +
         `When you're ready, please send us your *delivery address* to continue placing the order.`
 
       return {
@@ -449,7 +449,7 @@ export class WhatsAppService {
           `Payment: Cash on Delivery\n` +
           `Delivery Address: ${botState.deliveryAddress}\n\n` +
           `Our team will confirm your order within 2 hours. ` +
-          `Thank you for choosing HealPlace! 🙏\n\n` +
+          `Thank you for choosing Wonderland! 🙏\n\n` +
           `Reply *MENU* to go back to the main menu.`
 
         return {
@@ -466,7 +466,7 @@ export class WhatsAppService {
           `Order Number: *${orderNumber}*\n\n` +
           `Bank: Sampath Bank\n` +
           `Account Number: 1234567890\n` +
-          `Account Name: HealPlace (Pvt) Ltd\n` +
+          `Account Name: Wonderland (Pvt) Ltd\n` +
           `Branch: Colombo 03\n\n` +
           `Please transfer *LKR ${botState.cart ? botState.cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2) : '0.00'}* ` +
           `and send us a photo of the receipt to confirm your order.\n\n` +
@@ -487,7 +487,7 @@ export class WhatsAppService {
     // ── MENU shortcut from any step ─────────────────────────────────────────
     if (lower === 'menu' || lower === 'hi' || lower === 'hello' || lower === 'start') {
       const reply =
-        `👋 *HealPlace Main Menu*\n\n` +
+        `👋 *Wonderland Main Menu*\n\n` +
         `1️⃣  Browse Products\n` +
         `2️⃣  Place an Order\n` +
         `3️⃣  Check Order Status\n` +

@@ -17,15 +17,15 @@ originRequest:
   noHappyEyeballs: true
 
 ingress:
-  - hostname: healplace.lk
+  - hostname: wonderland.lk
     service: http://localhost:8080
-  - hostname: www.healplace.lk
+  - hostname: www.wonderland.lk
     service: http://localhost:8080
-  - hostname: api.healplace.lk
+  - hostname: api.wonderland.lk
     service: http://localhost:8080
-  - hostname: admin.healplace.lk
+  - hostname: admin.wonderland.lk
     service: http://localhost:8080
-  - hostname: pos.healplace.lk
+  - hostname: pos.wonderland.lk
     service: http://localhost:8080
 
   # Required catch-all.

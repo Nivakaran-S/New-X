@@ -201,7 +201,7 @@ export function Sidebar({ user }: SidebarProps) {
             H
           </div>
           <div>
-            <p className="font-semibold text-sm leading-none">HealPlace</p>
+            <p className="font-semibold text-sm leading-none">Wonderland</p>
             <p className="text-xs text-gray-400 mt-0.5">Admin Panel</p>
           </div>
         </div>

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   return {
     title: product.name,
-    description: product.description ?? `Buy ${product.name} from HealPlace. Fast delivery across Colombo.`,
+    description: product.description ?? `Buy ${product.name} from Wonderland. Fast delivery across Colombo.`,
     openGraph: {
       title: product.name,
       description: product.description ?? '',

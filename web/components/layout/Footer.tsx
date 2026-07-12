@@ -31,8 +31,8 @@ export function Footer() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Mail className="w-4 h-4 text-brand-400 flex-shrink-0" />
-              <a href="mailto:info@healplace.lk" className="hover:text-white">
-                info@healplace.lk
+              <a href="mailto:info@wonderland.lk" className="hover:text-white">
+                info@wonderland.lk
               </a>
             </div>
           </div>
@@ -119,7 +119,7 @@ export function Footer() {
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
           <p>
-            &copy; {year} HealPlace (Pvt) Ltd. BR No. PV/123456. All rights
+            &copy; {year} Wonderland (Pvt) Ltd. BR No. PV/123456. All rights
             reserved.
           </p>
 
@@ -136,7 +136,7 @@ export function Footer() {
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/94771234567?text=Hi%20HealPlace"
+              href="https://wa.me/94771234567?text=Hi%20Wonderland"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-green-400 hover:text-green-300"

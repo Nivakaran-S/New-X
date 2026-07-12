@@ -16,8 +16,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'HealPlace – Sri Lanka Wholesale Distributor',
-    template: '%s | HealPlace',
+    default: 'Wonderland – Sri Lanka Wholesale Distributor',
+    template: '%s | Wonderland',
   },
   description:
     "Sri Lanka's Premier Wholesale Distributor of FMCG products. Fast delivery across Colombo. Wholesale & retail pricing available.",
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'HealPlace',
+    title: 'Wonderland',
   },
   openGraph: {
     type: 'website',
     locale: 'en_LK',
-    url: 'https://healplace.lk',
-    siteName: 'HealPlace',
-    title: 'HealPlace – Sri Lanka Wholesale Distributor',
+    url: 'https://wonderland.lk',
+    siteName: 'Wonderland',
+    title: 'Wonderland – Sri Lanka Wholesale Distributor',
     description: "Sri Lanka's Premier Wholesale Distributor of FMCG products.",
   },
 }

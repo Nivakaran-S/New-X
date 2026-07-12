@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { CheckCircle2, ArrowRight, Building2, TrendingUp, Clock, Shield } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Wholesale Account | HealPlace',
+  title: 'Wholesale Account | Wonderland',
   description: 'Apply for a wholesale account and unlock better pricing, credit terms, and priority delivery for your business.',
 }
 
@@ -90,7 +90,7 @@ export default function WholesalePage() {
           </h1>
           <p className="text-gray-300 text-base sm:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
             Join hundreds of shops, pharmacies, and businesses who save thousands
-            of rupees every month with HealPlace wholesale accounts.
+            of rupees every month with Wonderland wholesale accounts.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -101,7 +101,7 @@ export default function WholesalePage() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <a
-              href="https://wa.me/94771234567?text=Hi%20HealPlace%2C%20I%27m%20interested%20in%20a%20wholesale%20account"
+              href="https://wa.me/94771234567?text=Hi%20Wonderland%2C%20I%27m%20interested%20in%20a%20wholesale%20account"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/10 transition-all text-base"
@@ -139,7 +139,7 @@ export default function WholesalePage() {
       {/* Benefits */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
-          Why wholesale with HealPlace?
+          Why wholesale with Wonderland?
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {BENEFITS.map(({ icon: Icon, title, description }) => (

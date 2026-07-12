@@ -1,14 +1,14 @@
 version: '3.9'
 
 # Chatwoot — Customer Support Chat Platform
-# Standalone deployment for HealPlace
+# Standalone deployment for Wonderland
 # Docs: https://www.chatwoot.com/docs/self-hosted/deployment/docker
 
 services:
   # ── PostgreSQL (Chatwoot's own instance) ─────────────────────────
   chatwoot-postgres:
     image: postgres:15-alpine
-    container_name: healplace-chatwoot-postgres
+    container_name: wonderland-chatwoot-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-chatwoot}
@@ -25,7 +25,7 @@ services:
   # ── Redis ─────────────────────────────────────────────────────────
   chatwoot-redis:
     image: redis:7-alpine
-    container_name: healplace-chatwoot-redis
+    container_name: wonderland-chatwoot-redis
     restart: unless-stopped
     command: redis-server --requirepass ${REDIS_PASSWORD:-chatwoot_dev}
     volumes:
@@ -39,7 +39,7 @@ services:
   # ── Chatwoot Rails App ────────────────────────────────────────────
   chatwoot-app:
     image: chatwoot/chatwoot:latest
-    container_name: healplace-chatwoot-app
+    container_name: wonderland-chatwoot-app
     restart: unless-stopped
     depends_on:
       chatwoot-postgres: { condition: service_healthy }
@@ -60,8 +60,8 @@ services:
       REDIS_URL: redis://:${REDIS_PASSWORD:-chatwoot_dev}@chatwoot-redis:6379
 
       # Email (optional — configure for notifications)
-      MAILER_SENDER_EMAIL: ${MAILER_SENDER_EMAIL:-noreply@healplace.com}
-      SMTP_DOMAIN: ${SMTP_DOMAIN:-healplace.com}
+      MAILER_SENDER_EMAIL: ${MAILER_SENDER_EMAIL:-noreply@wonderland.com}
+      SMTP_DOMAIN: ${SMTP_DOMAIN:-wonderland.com}
       SMTP_ADDRESS: ${SMTP_ADDRESS:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USERNAME: ${SMTP_USERNAME:-}
@@ -73,7 +73,7 @@ services:
       ACTIVE_STORAGE_SERVICE: local
       RAILS_ENV: production
       NODE_ENV: production
-      INSTALLATION_NAME: HealPlace
+      INSTALLATION_NAME: Wonderland
       LOG_LEVEL: info
     volumes:
       - chatwoot_storage:/app/storage
@@ -83,7 +83,7 @@ services:
   # ── Chatwoot Sidekiq Worker ───────────────────────────────────────
   chatwoot-worker:
     image: chatwoot/chatwoot:latest
-    container_name: healplace-chatwoot-worker
+    container_name: wonderland-chatwoot-worker
     restart: unless-stopped
     depends_on:
       chatwoot-postgres: { condition: service_healthy }
@@ -93,8 +93,8 @@ services:
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
       DATABASE_URL: postgresql://${POSTGRES_USER:-chatwoot}:${POSTGRES_PASSWORD}@chatwoot-postgres:5432/${POSTGRES_DB:-chatwoot_production}
       REDIS_URL: redis://:${REDIS_PASSWORD:-chatwoot_dev}@chatwoot-redis:6379
-      MAILER_SENDER_EMAIL: ${MAILER_SENDER_EMAIL:-noreply@healplace.com}
-      SMTP_DOMAIN: ${SMTP_DOMAIN:-healplace.com}
+      MAILER_SENDER_EMAIL: ${MAILER_SENDER_EMAIL:-noreply@wonderland.com}
+      SMTP_DOMAIN: ${SMTP_DOMAIN:-wonderland.com}
       SMTP_ADDRESS: ${SMTP_ADDRESS:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USERNAME: ${SMTP_USERNAME:-}
@@ -111,8 +111,8 @@ services:
 
 volumes:
   chatwoot_postgres:
-    name: healplace_chatwoot_postgres
+    name: wonderland_chatwoot_postgres
   chatwoot_redis:
-    name: healplace_chatwoot_redis
+    name: wonderland_chatwoot_redis
   chatwoot_storage:
-    name: healplace_chatwoot_storage
+    name: wonderland_chatwoot_storage

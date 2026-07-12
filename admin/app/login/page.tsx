@@ -45,7 +45,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-brand-500 rounded-2xl mb-4">
             <span className="text-white font-bold text-2xl">H</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">HealPlace Admin</h1>
+          <h1 className="text-2xl font-bold text-white">Wonderland Admin</h1>
           <p className="text-gray-400 text-sm mt-1">Sign in to your account</p>
         </div>
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-              placeholder="admin@healplace.com"
+              placeholder="admin@wonderland.com"
             />
           </div>
 
@@ -105,7 +105,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-center text-gray-500 text-xs mt-6">
-          HealPlace Wholesale Distribution Platform
+          Wonderland Wholesale Distribution Platform
         </p>
       </div>
     </div>

@@ -296,7 +296,7 @@ export class ProductsService {
   async uploadImage(productId: string, filename: string) {
     await this.findOne(productId)
 
-    const url = `https://cdn.healplace.com/products/${productId}/${filename}`
+    const url = `https://cdn.wonderland.com/products/${productId}/${filename}`
 
     const lastImage = await this.prisma.productImage.findFirst({
       where: { productId },

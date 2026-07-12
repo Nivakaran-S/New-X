@@ -58,7 +58,7 @@ function RegisterForm() {
       const res = await apiPost<ApiResponse<AuthTokens>>('/auth/register', payload)
       if (res.data) {
         login(res.data.accessToken, res.data.user as Parameters<typeof login>[1])
-        toast.success('Account created! Welcome to HealPlace.')
+        toast.success('Account created! Welcome to Wonderland.')
         router.push('/')
       }
     } catch (err) {

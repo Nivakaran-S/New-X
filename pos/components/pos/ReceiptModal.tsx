@@ -78,7 +78,7 @@ export function ReceiptModal({ order, change, onClose, onNewSale }: Props) {
           >
             {/* Store header (print only) */}
             <div className="hidden print:block text-center mb-4">
-              <p className="font-bold text-lg">HealPlace Wholesale</p>
+              <p className="font-bold text-lg">Wonderland Wholesale</p>
               <p className="text-sm">Pettah, Colombo 11</p>
               <p className="text-sm">Tel: +94 77 000 0000</p>
             </div>
@@ -165,7 +165,7 @@ export function ReceiptModal({ order, change, onClose, onNewSale }: Props) {
             {/* Print footer */}
             <div className="hidden print:block text-center text-xs text-slate-500 mt-4 pt-4 border-t border-slate-300">
               <p>Thank you for your business!</p>
-              <p>www.healplace.com</p>
+              <p>www.wonderland.com</p>
             </div>
           </div>
 

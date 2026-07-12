@@ -41,7 +41,7 @@ export default function LoginPage() {
             <ShieldCheck className="w-9 h-9 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
-            HealPlace POS
+            Wonderland POS
           </h1>
           <p className="text-slate-400 text-sm mt-1">
             Pettah Wholesale Terminal
@@ -67,7 +67,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="cashier@healplace.com"
+                placeholder="cashier@wonderland.com"
                 className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
               />
             </div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-slate-600 mt-6">
-          HealPlace Wholesale &copy; {new Date().getFullYear()}
+          Wonderland Wholesale &copy; {new Date().getFullYear()}
         </p>
       </div>
     </div>

@@ -21,13 +21,13 @@ async function main() {
   // ── Owner account ──────────────────────────────
   const passwordHash = await bcrypt.hash('Admin@1234', 12)
   const owner = await prisma.user.upsert({
-    where: { email: 'owner@healplace.lk' },
+    where: { email: 'owner@wonderland.lk' },
     update: {},
     create: {
-      email:        'owner@healplace.lk',
+      email:        'owner@wonderland.lk',
       phone:        '+94771000001',
-      name:         'HealPlace Owner',
-      businessName: 'HealPlace (Pvt) Ltd',
+      name:         'Wonderland Owner',
+      businessName: 'Wonderland (Pvt) Ltd',
       role:         'SUPER_ADMIN',
       accountType:  'STAFF',
       isActive:     true,
@@ -159,7 +159,7 @@ async function main() {
         isCodEnabled:        false, // Enable after PickMe Flash COD confirmed
         bankName:            'Commercial Bank of Ceylon',
         bankAccountNo:       '',    // Fill your account number
-        bankAccountName:     'HealPlace (Pvt) Ltd',
+        bankAccountName:     'Wonderland (Pvt) Ltd',
         bankBranch:          'Pettah',
         paymentHoldMinutes:  120,   // 2-hour hold on bank transfer orders
         maxCodOrderAmount:   25000,
@@ -174,10 +174,10 @@ async function main() {
     create: {
       key: 'store',
       value: {
-        name:             'HealPlace',
+        name:             'Wonderland',
         phone:            '',
         whatsappPhone:    '',
-        email:            'info@healplace.com',
+        email:            'info@wonderland.com',
         address:          'Pettah, Colombo 11, Sri Lanka',
         lat:              6.9349,
         lng:              79.8560,

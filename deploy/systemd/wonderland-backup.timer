@@ -1,5 +1,5 @@
 [Unit]
-Description=Run the HealPlace PostgreSQL backup hourly
+Description=Run the Wonderland PostgreSQL backup hourly
 
 [Timer]
 OnCalendar=hourly

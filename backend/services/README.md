@@ -1,6 +1,6 @@
-# HealPlace Services
+# Wonderland Services
 
-Self-hosted third-party services that power the HealPlace platform. Each service has its own `docker-compose.yml` for standalone deployment and a `.env.example` for configuration reference.
+Self-hosted third-party services that power the Wonderland platform. Each service has its own `docker-compose.yml` for standalone deployment and a `.env.example` for configuration reference.
 
 ---
 
@@ -18,10 +18,10 @@ Self-hosted third-party services that power the HealPlace platform. Each service
 
 ## Evolution API (WhatsApp Gateway)
 
-Evolution API v2 connects HealPlace to WhatsApp via the Baileys library. It handles:
+Evolution API v2 connects Wonderland to WhatsApp via the Baileys library. It handles:
 - QR code scanning to link WhatsApp sessions
 - Sending and receiving messages, images, and documents
-- Firing webhook events to the HealPlace API on every incoming message
+- Firing webhook events to the Wonderland API on every incoming message
 
 ### Quick Start
 
@@ -34,9 +34,9 @@ docker-compose up -d
 
 Open `http://localhost:8080` and use the API key from `.env` to create a WhatsApp instance and scan the QR code.
 
-### Integration with HealPlace API
+### Integration with Wonderland API
 
-The HealPlace API (`apps/api`) receives webhook events at:
+The Wonderland API (`apps/api`) receives webhook events at:
 ```
 POST /webhooks/whatsapp
 ```
@@ -67,10 +67,10 @@ Generate a strong secret key:
 openssl rand -hex 64
 ```
 
-### Integration with HealPlace API
+### Integration with Wonderland API
 
 When a WhatsApp conversation is escalated from the bot to a human agent:
-1. The HealPlace API sets `ConvStatus = HUMAN` in the database
+1. The Wonderland API sets `ConvStatus = HUMAN` in the database
 2. A new conversation is created in Chatwoot via the Chatwoot REST API
 3. The `CHATWOOT_API_URL` and `CHATWOOT_API_KEY` env vars in `apps/api` control this connection
 
@@ -78,7 +78,7 @@ When a WhatsApp conversation is escalated from the bot to a human agent:
 
 ## Meilisearch (Search Engine)
 
-Meilisearch powers the product catalogue search on the HealPlace storefront and admin panel. It indexes:
+Meilisearch powers the product catalogue search on the Wonderland storefront and admin panel. It indexes:
 - Products (name, SKU, description, brand, category, tags)
 - Product variants
 
@@ -93,9 +93,9 @@ docker-compose up -d
 
 The Meilisearch dashboard (development mode only) is available at `http://localhost:7700`.
 
-### Integration with HealPlace API
+### Integration with Wonderland API
 
-The HealPlace API syncs the product index via the Meilisearch JavaScript SDK. Configure these env vars in `apps/api`:
+The Wonderland API syncs the product index via the Meilisearch JavaScript SDK. Configure these env vars in `apps/api`:
 
 ```env
 MEILISEARCH_HOST=http://localhost:7700
@@ -111,7 +111,7 @@ pnpm --filter api run search:index
 
 ## Running All Services Together
 
-For a full local stack (HealPlace API + all services), use the root `docker-compose.yml` for the core infrastructure (PostgreSQL, Redis, Meilisearch) and start Evolution API and Chatwoot separately:
+For a full local stack (Wonderland API + all services), use the root `docker-compose.yml` for the core infrastructure (PostgreSQL, Redis, Meilisearch) and start Evolution API and Chatwoot separately:
 
 ```bash
 # Core infrastructure

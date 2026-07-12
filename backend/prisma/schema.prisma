@@ -1,4 +1,4 @@
-// HealPlace Wholesale Platform — Full Prisma Schema
+// Wonderland Wholesale Platform — Full Prisma Schema
 // PostgreSQL 16 via Supabase
 
 generator client {

@@ -1,4 +1,4 @@
-# HealPlace on a Raspberry Pi 4B (4GB) — Deployment Runbook
+# Wonderland on a Raspberry Pi 4B (4GB) — Deployment Runbook
 
 Runs the **whole platform** on one Pi: NestJS API, Next.js web store, Next.js admin,
 static POS, PostgreSQL, Redis, the WhatsApp bot, and public HTTPS.
@@ -72,7 +72,7 @@ printf 'ALGO=zstd\nPERCENT=50\nPRIORITY=100\n' | sudo tee /etc/default/zramswap
 sudo systemctl restart zramswap
 
 printf 'vm.swappiness=100\nvm.page-cluster=0\nvm.vfs_cache_pressure=50\nvm.overcommit_memory=1\n' \
-  | sudo tee /etc/sysctl.d/99-healplace.conf
+  | sudo tee /etc/sysctl.d/99-wonderland.conf
 sudo sysctl --system
 
 # Keep logs off flash
@@ -87,7 +87,7 @@ echo 'export PATH=/opt/node/bin:$PATH' | sudo tee /etc/profile.d/node.sh
 /opt/node/bin/node -p "process.arch"   # MUST print arm64
 
 sudo apt install -y build-essential python3   # bcrypt fallback insurance
-sudo useradd -r -m -d /srv/healplace -s /usr/sbin/nologin healplace
+sudo useradd -r -m -d /srv/wonderland -s /usr/sbin/nologin wonderland
 ```
 
 ## Phase 2 — Postgres + Redis (native, not Docker)
@@ -103,13 +103,13 @@ sudo apt install -y postgresql-16
 sudo systemctl stop postgresql
 sudo -u postgres /usr/lib/postgresql/16/bin/pg_checksums --enable -D /var/lib/postgresql/16/main
 
-sudo cp deploy/postgres/99-healplace-pi.conf /etc/postgresql/16/main/conf.d/
+sudo cp deploy/postgres/99-wonderland-pi.conf /etc/postgresql/16/main/conf.d/
 sudo mkdir -p /etc/systemd/system/postgresql@.service.d
 sudo cp deploy/systemd/postgresql-override.conf /etc/systemd/system/postgresql@.service.d/override.conf
 sudo systemctl daemon-reload && sudo systemctl start postgresql
 
-sudo -u postgres createuser --pwprompt healplace
-sudo -u postgres createdb -O healplace healplace
+sudo -u postgres createuser --pwprompt wonderland
+sudo -u postgres createdb -O wonderland wonderland
 
 # Redis — REQUIRED (see "Gotchas": order writes hang without it)
 sudo apt install -y redis-server
@@ -121,51 +121,51 @@ sudo systemctl restart redis-server
 ## Phase 3 — Deploy the artifacts
 
 Build via GitHub Actions (`.github/workflows/build-arm64.yml`, native arm64 runner),
-download `healplace-arm64.tar.gz`, then:
+download `wonderland-arm64.tar.gz`, then:
 
 ```bash
-sudo mkdir -p /srv/healplace && sudo tar -xzf healplace-arm64.tar.gz -C /srv/healplace
-sudo chown -R healplace:healplace /srv/healplace
-# -> /srv/healplace/{api,web,admin,pos}
+sudo mkdir -p /srv/wonderland && sudo tar -xzf wonderland-arm64.tar.gz -C /srv/wonderland
+sudo chown -R wonderland:wonderland /srv/wonderland
+# -> /srv/wonderland/{api,web,admin,pos}
 ```
 
-Create `/srv/healplace/api/.env` from `backend/.env.example`. The load-bearing values:
+Create `/srv/wonderland/api/.env` from `backend/.env.example`. The load-bearing values:
 
 ```ini
 NODE_ENV=production
 PORT=3001
 # connection_limit MUST be capped — max_connections is only 40 and several
 # Node processes each hold a pool.
-DATABASE_URL="postgresql://healplace:PASSWORD@127.0.0.1:5432/healplace?schema=public&connection_limit=5"
+DATABASE_URL="postgresql://wonderland:PASSWORD@127.0.0.1:5432/wonderland?schema=public&connection_limit=5"
 REDIS_URL="redis://127.0.0.1:6379"
 
 # CORS is a strict allowlist — wrong origins here and EVERY browser call fails.
-WEB_URL="https://healplace.lk"
-ADMIN_URL="https://admin.healplace.lk"
-POS_URL="https://pos.healplace.lk"
+WEB_URL="https://wonderland.lk"
+ADMIN_URL="https://admin.wonderland.lk"
+POS_URL="https://pos.wonderland.lk"
 
 JWT_SECRET="<64 random chars>"
 JWT_REFRESH_SECRET="<different 64 random chars>"
 
 R2_ACCOUNT_ID="..."        # R2_ENDPOINT is derived from this
-R2_BUCKET_NAME="healplace-uploads"
+R2_BUCKET_NAME="wonderland-uploads"
 R2_ACCESS_KEY_ID="..."
 R2_SECRET_ACCESS_KEY="..."
-R2_PUBLIC_URL="https://uploads.healplace.lk"
+R2_PUBLIC_URL="https://uploads.wonderland.lk"
 ```
 
-Each front-end needs `.env.local` with `NEXT_PUBLIC_API_URL=https://api.healplace.lk/api/v1`.
+Each front-end needs `.env.local` with `NEXT_PUBLIC_API_URL=https://api.wonderland.lk/api/v1`.
 
 Migrate + seed, then start:
 
 ```bash
-cd /srv/healplace/api
+cd /srv/wonderland/api
 npx prisma migrate deploy
-npx prisma db seed          # owner@healplace.lk / Admin@1234 — CHANGE IMMEDIATELY
+npx prisma db seed          # owner@wonderland.lk / Admin@1234 — CHANGE IMMEDIATELY
 
-sudo cp deploy/systemd/healplace-*.service /etc/systemd/system/
+sudo cp deploy/systemd/wonderland-*.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now healplace-api healplace-web healplace-admin
+sudo systemctl enable --now wonderland-api wonderland-web wonderland-admin
 ```
 
 ## Phase 4 — Caddy + Cloudflare Tunnel
@@ -177,11 +177,11 @@ sudo systemctl restart caddy      # serves static POS + routes by Host on :8080
 
 # cloudflared (arm64)
 sudo cloudflared tunnel login
-sudo cloudflared tunnel create healplace
+sudo cloudflared tunnel create wonderland
 sudo cp deploy/cloudflared/config.yml /etc/cloudflared/config.yml
 # fill in the tunnel ID, then route DNS:
-for h in healplace.lk www.healplace.lk api.healplace.lk admin.healplace.lk pos.healplace.lk; do
-  sudo cloudflared tunnel route dns healplace "$h"
+for h in wonderland.lk www.wonderland.lk api.wonderland.lk admin.wonderland.lk pos.wonderland.lk; do
+  sudo cloudflared tunnel route dns wonderland "$h"
 done
 sudo cloudflared service install && sudo systemctl enable --now cloudflared
 ```
@@ -204,8 +204,8 @@ Pair via QR, then set `isWhatsAppBotEnabled = true` in AppSetting (admin → Set
 sudo apt install -y rclone
 rclone config          # create a remote named "offsite" (R2 = zero egress)
 sudo install -m 700 deploy/scripts/pg-backup.sh /usr/local/bin/pg-backup.sh
-sudo cp deploy/systemd/healplace-backup.{service,timer} /etc/systemd/system/
-sudo systemctl enable --now healplace-backup.timer
+sudo cp deploy/systemd/wonderland-backup.{service,timer} /etc/systemd/system/
+sudo systemctl enable --now wonderland-backup.timer
 ```
 
 **Test the restore monthly.** An untested backup is not a backup.
@@ -215,17 +215,17 @@ sudo systemctl enable --now healplace-backup.timer
 ## Verification
 
 ```bash
-systemctl is-active postgresql redis-server healplace-api healplace-web healplace-admin caddy cloudflared
+systemctl is-active postgresql redis-server wonderland-api wonderland-web wonderland-admin caddy cloudflared
 vcgencmd get_throttled                       # MUST be 0x0
-curl -s https://api.healplace.lk/api/v1/health   # {"status":"ok","db":"connected","redis":"connected"}
+curl -s https://api.wonderland.lk/api/v1/health   # {"status":"ok","db":"connected","redis":"connected"}
 free -h                                      # expect ~1.6-2.6 GB used
 ```
 
 Then, in a browser:
-1. `https://healplace.lk` — storefront loads **with the Bestsellers row populated**
+1. `https://wonderland.lk` — storefront loads **with the Bestsellers row populated**
    (proves the homepage ISR fix; see Gotchas).
-2. `https://admin.healplace.lk/dashboard` — log in, KPIs render.
-3. `https://pos.healplace.lk` — **complete a sale.** It must finish, not hang
+2. `https://admin.wonderland.lk/dashboard` — log in, KPIs render.
+3. `https://pos.wonderland.lk` — **complete a sale.** It must finish, not hang
    (this is the real Redis test).
 4. Watch the sale appear live in an open admin tab (Socket.io through the tunnel).
 5. Upload a payment slip — it should land in R2.

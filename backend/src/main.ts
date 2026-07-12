@@ -49,7 +49,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 
   await app.listen(port)
-  console.log(`\n🚀 HealPlace API running at http://localhost:${port}/api/v1`)
+  console.log(`\n🚀 Wonderland API running at http://localhost:${port}/api/v1`)
 }
 
 bootstrap()

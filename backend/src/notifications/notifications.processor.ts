@@ -154,14 +154,14 @@ export class NotificationsProcessor extends WorkerHost {
         <h2>You left something behind, ${user.name ?? 'there'}!</h2>
         <p>Your cart is waiting for you:</p>
         <ul>${itemLines.map(l => `<li>${l}</li>`).join('')}</ul>
-        <p><a href="https://healplace.com/cart">Complete your order</a></p>
+        <p><a href="https://wonderland.com/cart">Complete your order</a></p>
       `
-      await this.notificationsService.sendEmail(user.email, 'Your HealPlace cart is waiting', html)
+      await this.notificationsService.sendEmail(user.email, 'Your Wonderland cart is waiting', html)
     }
 
     // WhatsApp (fire-and-forget via existing WhatsApp service pattern)
     if (user.phone) {
-      const message = `Hi ${user.name ?? 'there'}! You left items in your HealPlace cart:\n${itemLines.join('\n')}\n\nComplete your order: https://healplace.com/cart`
+      const message = `Hi ${user.name ?? 'there'}! You left items in your Wonderland cart:\n${itemLines.join('\n')}\n\nComplete your order: https://wonderland.com/cart`
       this.logger.log(`[WhatsApp] Abandoned cart to ${user.phone}: ${message.substring(0, 80)}...`)
       // WhatsApp integration point — delegate to WhatsApp service when wired
     }
@@ -186,7 +186,7 @@ export class NotificationsProcessor extends WorkerHost {
 
     // WhatsApp reorder reminder
     if (user.phone) {
-      const message = `Hi ${user.name ?? 'there'}! It's time to restock:\n${itemLines.join('\n')}\n\nReorder now: https://healplace.com/shop`
+      const message = `Hi ${user.name ?? 'there'}! It's time to restock:\n${itemLines.join('\n')}\n\nReorder now: https://wonderland.com/shop`
       this.logger.log(`[WhatsApp] Reorder reminder to ${user.phone}: ${message.substring(0, 80)}...`)
       // WhatsApp integration point
     }
@@ -197,9 +197,9 @@ export class NotificationsProcessor extends WorkerHost {
         <h2>Time to restock, ${user.name ?? 'there'}!</h2>
         <p>Based on your order history, these products may be running low:</p>
         <ul>${itemLines.map(l => `<li>${l}</li>`).join('')}</ul>
-        <p><a href="https://healplace.com/shop">Shop now</a></p>
+        <p><a href="https://wonderland.com/shop">Shop now</a></p>
       `
-      await this.notificationsService.sendEmail(user.email, 'Time to restock your HealPlace supplies', html)
+      await this.notificationsService.sendEmail(user.email, 'Time to restock your Wonderland supplies', html)
     }
   }
 }

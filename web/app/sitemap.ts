@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_WEB_URL || 'https://healplace.lk'
+  const baseUrl = process.env.NEXT_PUBLIC_WEB_URL || 'https://wonderland.lk'
 
   // Fetch all active products
   let productUrls: MetadataRoute.Sitemap = []

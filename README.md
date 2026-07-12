@@ -1,6 +1,6 @@
-# HealPlace — Wholesale & Retail Commerce Platform
+# Wonderland — Wholesale & Retail Commerce Platform
 
-Unified digital commerce system for HealPlace (Sri Lanka health-goods wholesaler/retailer):
+Unified digital commerce system for Wonderland (Sri Lanka health-goods wholesaler/retailer):
 wholesale ordering, retail e-commerce, in-store POS, and backend operations.
 
 ## Monorepo layout
@@ -26,7 +26,7 @@ cp .env.example .env          # set JWT secrets + DATABASE_URL/REDIS_URL
 npm install
 npm run db:generate
 npm run db:migrate:deploy
-npm run db:seed               # owner: owner@healplace.lk / Admin@1234
+npm run db:seed               # owner: owner@wonderland.lk / Admin@1234
 npm run build && npm run start   # http://localhost:3001/api/v1
 
 # 3. Front-ends (each: npm install, then npm run dev)

@@ -36,7 +36,7 @@ export class SettingsService {
 
   async seed() {
     const defaults = [
-      { key: 'store_name', value: 'HealPlace' },
+      { key: 'store_name', value: 'Wonderland' },
       { key: 'currency', value: 'LKR' },
       { key: 'payment_methods', value: ['BANK_TRANSFER', 'COD', 'CASH'] },
     ]

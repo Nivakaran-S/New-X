@@ -1,13 +1,13 @@
 version: '3.9'
 
 # Evolution API v2 — WhatsApp Gateway
-# Standalone deployment for HealPlace
+# Standalone deployment for Wonderland
 # Docs: https://doc.evolution-api.com/
 
 services:
   evolution-api:
     image: atendai/evolution-api:latest
-    container_name: healplace-evolution-api
+    container_name: wonderland-evolution-api
     restart: unless-stopped
     ports:
       - '8080:8080'
@@ -35,7 +35,7 @@ services:
       # WhatsApp
       WA_BUSINESS_TOKEN_WEBHOOK: ${WA_BUSINESS_TOKEN_WEBHOOK:-}
 
-      # Webhook — where Evolution sends events (your HealPlace API)
+      # Webhook — where Evolution sends events (your Wonderland API)
       WEBHOOK_GLOBAL_URL: ${WEBHOOK_GLOBAL_URL:-}
       WEBHOOK_GLOBAL_ENABLED: ${WEBHOOK_GLOBAL_ENABLED:-false}
       WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: false
@@ -63,6 +63,6 @@ services:
 
 volumes:
   evolution_store:
-    name: healplace_evolution_store
+    name: wonderland_evolution_store
   evolution_instances:
-    name: healplace_evolution_instances
+    name: wonderland_evolution_instances

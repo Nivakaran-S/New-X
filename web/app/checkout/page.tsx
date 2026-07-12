@@ -20,7 +20,7 @@ const DELIVERY_FEE = 450
 // ── Bank details (in real app, fetch from settings API) ───────────────────
 const BANK_DETAILS = {
   bankName: 'Commercial Bank of Ceylon',
-  accountName: 'HealPlace (Pvt) Ltd',
+  accountName: 'Wonderland (Pvt) Ltd',
   accountNo: '8005512345',
   branch: 'Pettah Branch',
 }

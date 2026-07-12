@@ -9,14 +9,14 @@
 # Install:
 #   sudo install -m 700 pg-backup.sh /usr/local/bin/pg-backup.sh
 #   configure an rclone remote named "offsite" (Cloudflare R2 = zero egress)
-#   sudo systemctl enable --now healplace-backup.timer
+#   sudo systemctl enable --now wonderland-backup.timer
 #
 set -euo pipefail
 
-DB_NAME="${DB_NAME:-healplace}"
+DB_NAME="${DB_NAME:-wonderland}"
 DB_USER="${DB_USER:-postgres}"
-LOCAL_DIR="${LOCAL_DIR:-/var/backups/healplace}"
-REMOTE="${REMOTE:-offsite:healplace-backups}"
+LOCAL_DIR="${LOCAL_DIR:-/var/backups/wonderland}"
+REMOTE="${REMOTE:-offsite:wonderland-backups}"
 KEEP_LOCAL_DAYS="${KEEP_LOCAL_DAYS:-2}"
 
 TS="$(date -u +%Y%m%dT%H%M%SZ)"

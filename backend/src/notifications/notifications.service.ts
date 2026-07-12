@@ -17,7 +17,7 @@ export class NotificationsService {
 
   async sendEmail(to: string, subject: string, html: string): Promise<boolean> {
     const apiKey = this.config.get<string>('RESEND_API_KEY', '')
-    const from = this.config.get<string>('EMAIL_FROM', 'noreply@healplace.com')
+    const from = this.config.get<string>('EMAIL_FROM', 'noreply@wonderland.com')
 
     try {
       const res = await fetch('https://api.resend.com/emails', {

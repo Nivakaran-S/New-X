@@ -3,8 +3,8 @@ import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'HealPlace POS',
-  description: 'Point-of-Sale terminal for HealPlace Wholesale',
+  title: 'Wonderland POS',
+  description: 'Point-of-Sale terminal for Wonderland Wholesale',
 }
 
 export default function RootLayout({

@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     // the Pi would run libvips per request, which is the single biggest source of
     // per-request memory and CPU on this hardware.
     unoptimized: true,
-    remotePatterns: [{ protocol: "https", hostname: "uploads.healplace.lk" }],
+    remotePatterns: [{ protocol: "https", hostname: "uploads.wonderland.lk" }],
   },
   experimental: {
     // Next preloads every page's modules at server start. Disabling that trades a

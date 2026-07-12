@@ -322,7 +322,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
   const whatsappUrl = buildWhatsAppUrl(
     '94771234567',
-    `Hi HealPlace! I'd like to order: ${product.name} (${qty} × ${currentOption?.label ?? 'unit'})`,
+    `Hi Wonderland! I'd like to order: ${product.name} (${qty} × ${currentOption?.label ?? 'unit'})`,
   )
 
   const images =

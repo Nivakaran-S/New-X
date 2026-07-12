@@ -28,7 +28,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ token: null, user: null }),
     }),
     {
-      name: 'healplace-pos-auth',
+      name: 'wonderland-pos-auth',
       storage: createJSONStorage(() => sessionStorage),
     },
   ),

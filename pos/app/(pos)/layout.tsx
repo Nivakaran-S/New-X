@@ -63,7 +63,7 @@ export default function PosLayout({ children }: { children: React.ReactNode }) {
         {/* Left: Brand + nav */}
         <div className="flex items-center gap-6">
           <span className="font-bold text-brand-400 text-sm tracking-wide">
-            HealPlace POS
+            Wonderland POS
           </span>
           <nav className="flex items-center gap-1">
             {navLinks.map(({ href, label, icon: Icon }) => {

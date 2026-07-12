@@ -1,5 +1,5 @@
 ##############################################################
-# HealPlace — Render Infrastructure Blueprint
+# Wonderland — Render Infrastructure Blueprint
 # Docs: https://render.com/docs/blueprint-spec
 # Deploy: connect repo on render.com → "New Blueprint Instance"
 ##############################################################
@@ -7,7 +7,7 @@
 services:
   # ── API (NestJS) ─────────────────────────────────────────
   - type: web
-    name: healplace-api
+    name: wonderland-api
     runtime: node
     region: singapore         # closest to Sri Lanka
     plan: free
@@ -27,7 +27,7 @@ services:
       # ── Database (auto-linked to Render Postgres below) ──
       - key: DATABASE_URL
         fromDatabase:
-          name: healplace-db
+          name: wonderland-db
           property: connectionString
 
       # ── Set these manually in the Render dashboard ───────
@@ -53,13 +53,13 @@ services:
         value: 30d
 
       - key: WEB_URL
-        sync: false    # https://healplace.vercel.app
+        sync: false    # https://wonderland.vercel.app
 
       - key: POS_URL
-        sync: false    # https://healplace-pos.vercel.app
+        sync: false    # https://wonderland-pos.vercel.app
 
       - key: ADMIN_URL
-        sync: false    # https://healplace-admin.vercel.app
+        sync: false    # https://wonderland-admin.vercel.app
 
       - key: R2_ACCOUNT_ID
         sync: false
@@ -71,16 +71,16 @@ services:
         sync: false
 
       - key: R2_BUCKET_NAME
-        value: healplace-uploads
+        value: wonderland-uploads
 
       - key: R2_PUBLIC_URL
-        sync: false    # https://uploads.healplace.lk
+        sync: false    # https://uploads.wonderland.lk
 
       - key: RESEND_API_KEY
         sync: false
 
       - key: EMAIL_FROM
-        value: "HealPlace <noreply@healplace.lk>"
+        value: "Wonderland <noreply@wonderland.lk>"
 
       - key: SHOP_LAT
         value: "6.9349"
@@ -93,9 +93,9 @@ services:
 
 # ── PostgreSQL ────────────────────────────────────────────
 databases:
-  - name: healplace-db
-    databaseName: healplace
-    user: healplace
+  - name: wonderland-db
+    databaseName: wonderland
+    user: wonderland
     plan: free
     region: singapore
     # ⚠️  Render free PostgreSQL expires after 90 days.

@@ -15,7 +15,7 @@ interface ReferralData {
   pendingReferrals: number
 }
 
-const WEB_URL = process.env.NEXT_PUBLIC_WEB_URL || 'https://healplace.lk'
+const WEB_URL = process.env.NEXT_PUBLIC_WEB_URL || 'https://wonderland.lk'
 
 export default function ReferralPage() {
   const router = useRouter()
@@ -52,7 +52,7 @@ export default function ReferralPage() {
   function shareWhatsApp() {
     if (!referralLink) return
     const text = encodeURIComponent(
-      `Hey! I use HealPlace for wholesale FMCG — great prices and fast delivery. Sign up with my link and get started: ${referralLink}`,
+      `Hey! I use Wonderland for wholesale FMCG — great prices and fast delivery. Sign up with my link and get started: ${referralLink}`,
     )
     window.open(`https://wa.me/?text=${text}`, '_blank')
   }
@@ -161,13 +161,13 @@ export default function ReferralPage() {
             {
               step: '2',
               title: 'They sign up',
-              desc: 'Your friend registers on HealPlace using your referral link.',
+              desc: 'Your friend registers on Wonderland using your referral link.',
               emoji: '📝',
             },
             {
               step: '3',
               title: 'They place an order',
-              desc: 'Your friend places their first order on HealPlace.',
+              desc: 'Your friend places their first order on Wonderland.',
               emoji: '🛒',
             },
             {
@@ -198,7 +198,7 @@ export default function ReferralPage() {
       {/* Terms callout */}
       <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-xs text-gray-500">
         <p className="font-semibold text-gray-700 mb-1">Terms</p>
-        <p>Referral points are credited once your friend's first order is delivered. Maximum 50 referrals per account. HealPlace reserves the right to modify the referral program at any time.</p>
+        <p>Referral points are credited once your friend's first order is delivered. Maximum 50 referrals per account. Wonderland reserves the right to modify the referral program at any time.</p>
       </div>
     </div>
   )

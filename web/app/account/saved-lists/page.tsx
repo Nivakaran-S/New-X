@@ -43,7 +43,7 @@ interface SavedList {
   updatedAt: string
 }
 
-const STORAGE_KEY = 'healplace-saved-lists'
+const STORAGE_KEY = 'wonderland-saved-lists'
 
 function loadLists(): SavedList[] {
   if (typeof window === 'undefined') return []

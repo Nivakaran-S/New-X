@@ -7,8 +7,8 @@ import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'HealPlace Admin',
-  description: 'HealPlace wholesale FMCG distribution admin panel',
+  title: 'Wonderland Admin',
+  description: 'Wonderland wholesale FMCG distribution admin panel',
 }
 
 export default function RootLayout({

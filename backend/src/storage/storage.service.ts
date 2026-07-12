@@ -14,7 +14,7 @@ export class StorageService {
     this.bucket =
       config.get<string>('R2_BUCKET_NAME') ??
       config.get<string>('R2_BUCKET') ??
-      'healplace'
+      'wonderland'
 
     // R2's S3 endpoint is derived from the account id unless given explicitly.
     const accountId = config.get<string>('R2_ACCOUNT_ID', '')
@@ -44,7 +44,7 @@ export class StorageService {
       ContentType: mimeType,
     })
     await this.s3.send(command)
-    const publicUrl = this.config.get<string>('R2_PUBLIC_URL', 'https://cdn.healplace.com')
+    const publicUrl = this.config.get<string>('R2_PUBLIC_URL', 'https://cdn.wonderland.com')
     return `${publicUrl}/${key}`
   }
 

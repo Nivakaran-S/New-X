@@ -88,7 +88,7 @@ export class StockAlertsService {
         await this.notificationsService.sendEmail(
           alert.email,
           `Pre-order ready — ${alert.variant.product.name}`,
-          `<h2>Your pre-order is ready!</h2><p>${alert.variant.product.name} (${alert.variant.name}) is now available. <a href="https://healplace.com/shop">Order now</a></p>`
+          `<h2>Your pre-order is ready!</h2><p>${alert.variant.product.name} (${alert.variant.name}) is now available. <a href="https://wonderland.com/shop">Order now</a></p>`
         )
       }
       await this.prisma.stockAlert.update({

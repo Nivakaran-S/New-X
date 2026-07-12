@@ -1,19 +1,18 @@
 [Unit]
-Description=HealPlace Web Store (Next.js standalone)
-After=network-online.target healplace-api.service
+Description=Wonderland Admin Panel (Next.js standalone)
+After=network-online.target wonderland-api.service
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=healplace
-Group=healplace
-WorkingDirectory=/srv/healplace/web
+User=wonderland
+Group=wonderland
+WorkingDirectory=/srv/wonderland/admin
 Environment=NODE_ENV=production
-Environment=PORT=3000
-# Bind to loopback only — Caddy/cloudflared is the only thing that should reach it.
+Environment=PORT=3003
 Environment=HOSTNAME=127.0.0.1
 Environment=NODE_OPTIONS=--max-old-space-size=320
-EnvironmentFile=-/srv/healplace/web/.env.local
+EnvironmentFile=-/srv/wonderland/admin/.env.local
 ExecStart=/opt/node/bin/node server.js
 
 Restart=always

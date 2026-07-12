@@ -26,7 +26,7 @@ export class ReferralService {
     })
     if (!user) throw new NotFoundException('User not found')
 
-    const baseUrl = this.config.get<string>('APP_URL', 'https://healplace.com')
+    const baseUrl = this.config.get<string>('APP_URL', 'https://wonderland.com')
     return {
       code: user.referralCode ?? userId,
       link: `${baseUrl}/register?ref=${user.referralCode ?? userId}`,

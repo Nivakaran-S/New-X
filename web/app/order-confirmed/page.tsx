@@ -6,7 +6,7 @@ import PurchaseTracker from './PurchaseTracker'
 
 const BANK_DETAILS = {
   bankName: 'Commercial Bank of Ceylon',
-  accountName: 'HealPlace (Pvt) Ltd',
+  accountName: 'Wonderland (Pvt) Ltd',
   accountNo: '8005512345',
   branch: 'Pettah Branch',
 }
@@ -70,7 +70,7 @@ export default async function OrderConfirmedPage({ searchParams }: OrderConfirme
           Our team is available on WhatsApp for any questions about your order.
         </p>
         <a
-          href={`https://wa.me/94771234567?text=Hi%20HealPlace!%20I%20have%20a%20question%20about%20my%20order%20${ref ?? ''}`}
+          href={`https://wa.me/94771234567?text=Hi%20Wonderland!%20I%20have%20a%20question%20about%20my%20order%20${ref ?? ''}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-[#25D366] text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-[#20b858] transition-colors text-sm"

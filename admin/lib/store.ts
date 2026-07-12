@@ -18,7 +18,7 @@ export const useAuthStore = create<AuthStore>()(
       logout: () => set({ token: null, user: null }),
     }),
     {
-      name: 'healplace-admin-auth',
+      name: 'wonderland-admin-auth',
     },
   ),
 )

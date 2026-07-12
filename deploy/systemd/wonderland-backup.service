@@ -1,5 +1,5 @@
 [Unit]
-Description=HealPlace hourly PostgreSQL offsite backup
+Description=Wonderland hourly PostgreSQL offsite backup
 After=postgresql.service network-online.target
 Requires=postgresql.service
 

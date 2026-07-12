@@ -1,4 +1,4 @@
-# HealPlace Platform — Local Setup Guide
+# Wonderland Platform — Local Setup Guide
 
 ## What's in this folder
 
@@ -28,7 +28,7 @@ A complete Turborepo monorepo with:
 ## Step 1 — Copy environment file
 
 ```bash
-cd healplace
+cd wonderland
 cp .env.example .env
 ```
 
@@ -79,7 +79,7 @@ pnpm db:seed
 ```
 
 This creates:
-- Owner login: `owner@healplace.lk` / `Admin@1234`
+- Owner login: `owner@wonderland.lk` / `Admin@1234`
 - 5 pricing tiers (Retail → Platinum)
 - PickMe Flash vehicle capacity table
 - Sample Dettol Soap product with inventory
@@ -104,7 +104,7 @@ Turborepo starts all 4 apps simultaneously:
 ## First login
 
 **Admin panel** (http://localhost:3003):
-- Email: `owner@healplace.lk`
+- Email: `owner@wonderland.lk`
 - Password: `Admin@1234`
 
 **POS terminal** (http://localhost:3002):
@@ -128,8 +128,8 @@ DATABASE_URL="your Supabase connection string"
 R2_ACCOUNT_ID=""
 R2_ACCESS_KEY_ID=""
 R2_SECRET_ACCESS_KEY=""
-R2_BUCKET_NAME="healplace-uploads"
-R2_PUBLIC_URL="https://uploads.healplace.lk"
+R2_BUCKET_NAME="wonderland-uploads"
+R2_PUBLIC_URL="https://uploads.wonderland.lk"
 
 # For email (Resend):
 RESEND_API_KEY=""
@@ -179,17 +179,17 @@ pnpm db:studio        # Open Prisma Studio (visual DB browser)
 pnpm db:seed          # Re-run seed
 
 # Run a single app:
-pnpm --filter @healplace/api dev
-pnpm --filter @healplace/web dev
-pnpm --filter @healplace/pos dev
-pnpm --filter @healplace/admin dev
+pnpm --filter @wonderland/api dev
+pnpm --filter @wonderland/web dev
+pnpm --filter @wonderland/pos dev
+pnpm --filter @wonderland/admin dev
 ```
 
 ---
 
 ## Troubleshooting
 
-**pnpm install fails:** Make sure you're in the `healplace/` folder (with `pnpm-workspace.yaml`), not a subfolder.
+**pnpm install fails:** Make sure you're in the `wonderland/` folder (with `pnpm-workspace.yaml`), not a subfolder.
 
 **Docker services not starting:** Check Docker Desktop is running. Run `docker compose logs` to see errors.
 
